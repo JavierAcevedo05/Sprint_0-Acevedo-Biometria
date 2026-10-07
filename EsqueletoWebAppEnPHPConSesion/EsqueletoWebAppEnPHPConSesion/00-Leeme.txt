@@ -1,0 +1,8 @@
+1. Hay que arrancar un servidor http+php con este directorio como base.
+Por ejemplo:
+
+	php -S localhost:8080 -t .
+
+2. En un navegador cargar:
+
+   http://localhost:8080/ux/Aplicacion.html
