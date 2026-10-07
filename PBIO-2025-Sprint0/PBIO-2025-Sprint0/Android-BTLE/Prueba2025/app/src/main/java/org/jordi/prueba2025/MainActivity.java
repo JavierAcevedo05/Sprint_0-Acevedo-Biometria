@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
     } // ()
 
     // --------------------------------------------------------------
-    // --------------------------------------------------------------
+    // ----------------------------------------------------------------
     @SuppressLint("MissingPermission")
     private void detenerBusquedaDispositivosBTLE() {
 
