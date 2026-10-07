@@ -1,9 +1,8 @@
-# PROMPT 1 · GENERAR LA BASE DE DATOS
+# PROMPT 1 - GENERAR LA BASE DE DATOS
 
-## Rol y objetivo
-Eres un programador senior de la asignatura. A partir de esta especificación
-**inmutable** tienes que generar la base de datos MySQL/MariaDB del sistema
-"beacon -> móvil -> servidor REST -> base de datos -> web" y sus tests
+objetivo
+A partir de esta especificación tienes que generar la base de datos MySQL/MariaDB
+ del sistema "beacon -> móvil -> servidor REST -> base de datos -> web" y sus tests
 automáticos. No añadas ninguna tabla, columna, restricción o fichero que no
 esté especificado aquí.
 
@@ -41,23 +40,22 @@ Diagrama de contexto:
 
 ## 2. ACLARACIONES EN TEXTO
 
-- La tabla se llama **`CODIGO`** (sin tilde, con backticks no es necesario).
-  En los comentarios y documentos se puede escribir "CÓDIGO".
-- **`id`** es la clave primaria y la rellena sola el motor (`auto_increment`).
+- La tabla se llama **CODIGO**
+- 'id' es la clave primaria y la rellena sola el motor (`auto_increment`).
   El móvil y la web NUNCA envían `id`.
-- **`valor`** es el código que trae el beacon. Es un entero en el rango
-  `[0, 65535]` (es el campo *minor* del iBeacon, 2 bytes sin signo). La base
+- 'valor' es el código que trae el beacon. Es un entero en el rango
+  [0, 65535] (es el campo minor del iBeacon, 2 bytes sin signo). La base
   de datos debe impedir cualquier valor fuera de ese rango.
-- **`fecha`** es el momento en que se recibe el código. La rellena SOLA la
-  base de datos con `DEFAULT CURRENT_TIMESTAMP` en el mismo `INSERT`. El móvil
+- 'fecha' es el momento en que se recibe el código. La rellena sola la
+  base de datos con DEFAULT CURRENT_TIMESTAMP en el mismo INSERT. El móvil
   NUNCA la envía.
-- Motor `InnoDB` y juego de caracteres `utf8mb4` (para evitar problemas con
-  acentos y emojis).
-- Hay una base de datos de producción (`codex`) y los tests crean y destruyen
-  una base de datos de pruebas (`codex_test`). El script de SQL crea la de
+- Motor InnoDB y juego de caracteres utf8mb4 (para evitar problemas con
+  acentos).
+- Hay una base de datos de producción (codex) y los tests crean y destruyen
+  una base de datos de pruebas (codex_test). El script de SQL crea la de
   producción; los tests crean la suya copiando el mismo esquema.
-- Las tablas se crean UNA sola vez a mano/script, como manda la asignatura:
-  la aplicación solo hace `INSERT` y `SELECT`.
+- Las tablas se crean una sola vez a mano/script, como manda la asignatura:
+  la aplicación solo hace INSERT y SELECT.
 
 ## 3. DIRECTRICES (qué y cómo, exactamente)
 
@@ -66,7 +64,7 @@ Diagrama de contexto:
 1. `bd/crearCodigo.sql` — crea la base de datos de producción y la tabla.
 2. `bd/borrarCodigo.sql` — `DROP TABLE IF EXISTS CODIGO;` (lo usan los tests
    para poder empezar de cero).
-3. `test/mainTest1-bd.php` — los tests automáticos (ver sección 5).
+3. `test/mainTest1-bd.php` — los tests automáticos .
 
 ### Contenido exacto del esquema
 
@@ -86,25 +84,23 @@ create table CODIGO (
   constraint CODIGO_PK primary key ( id ),
   constraint CODIGO_VALOR_RANGO
     check ( valor >= 0 and valor <= 65535 )
-) engine = InnoDB default charset = utf8mb4;
-```
+) 
 
 Aclaraciones obligatorias:
 - La sentencia de creación termina con `;`. Todas las sentencias SQL llevan
   `;` al final.
 - Los identificadores SQL van en MAYÚSCULAS (`CODIGO`, `id`, `valor`,
   `fecha` en minúsculas, como en el diagrama).
-- Nota en un comentario del SQL: el `CHECK` necesita MySQL 8.0.16+ o
-  MariaDB 10.2+.
+- Nota en un comentario del SQL: el `CHECK` necesita MySQL 8.0.16
 
-### Estructura de los tests (PHP autónomo, sin framework)
+### Estructura de los tests
 
 `test/mainTest1-bd.php` es un script PHP que se ejecuta con
 `php test/mainTest1-bd.php`, no usa ninguna librería externa (solo PDO, que
 viene con PHP), y:
 - crea la base `codex_test` y la tabla `CODIGO` en ella (usando el mismo
   esquema),
-- ejecuta cada prueba (sección 5),
+- ejecuta cada prueba,
 - imprime `OK` o `FALLO` con el nombre de cada prueba y, al final,
   `resultado final: N de N OK`;
 - termina con `exit(0)` si todas pasan y `exit(1)` si alguna falla
@@ -136,8 +132,7 @@ variables de entorno `CODEX_USUARIO_BD`, `CODEX_PASSWORD_BD`,
 create database if not exists codex ...
 ```
 
-- Prohibido: comentarios que describan línea por línea el código, comentarios
-  redundantes con el nombre de la sentencia o chistes.
+
 
 ## 5. TESTS AUTOMÁTICOS (lista literal de casos)
 
